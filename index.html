@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+		body{
+			height: 3000px;
+		}
+              #bigbox{
+              	width: 304px;
+              	height: 320px;
+              	border: solid 1px black;
+              	position: relative;
+              }
+              #bigbox img{
+              	width: 304px;
+              	height: 320px;
+              }
+              #list{
+              	margin: 0;
+              	padding: 0;
+              }
+              #list li{
+              	
+              	width: 70px;
+              	height: 70px;
+              	list-style: none;
+              	float: left;
+              	margin-right: 8px;
+              	margin-top: 10px;
+              }
+              #list img{
+              	width: 70px;
+              	height: 70px;
+              	border: solid 1px black;
+              }
+              #fdj{
+              	width: 152px;
+              	height: 152px;
+              	background: url(img/star.jpg);
+              	position: absolute;
+              	top: 0;
+              	left: 0;
+              	opacity: 0.2;
+              	display: none;
+              }
+              #big{
+              	width: 304px;
+              	height: 320px;
+              	border: solid 1px black;
+              	position: absolute;
+              	left: 340px;
+              	top: 8px;
+              	display: none;
+              	background: url(img/shirt_1_big.jpg);
+              	background-size: 608px 640px;
+              }
+		</style>
+		<script>
+			onload = function(){
+				var bigimg = document.getElementById("bigimg");
+				var bigbox = document.getElementById("bigbox");
+				var big = document.getElementById("big");
+				var fdj = document.getElementById("fdj");
+				var list = document.getElementById("list");
+				var listimg = list.getElementsByTagName("img");
+				//last,记录上一个边框颜色
+				var last=listimg[0];
+				for(var i =0;i<listimg.length;i++){
+					listimg[i].index = i;
+					listimg[i].onmouseover = function(){
+						last.style.borderColor = "black";
+						this.style.borderColor = "red";
+						last = this;
+                        bigimg.src = "img/shirt_"+(this.index+1)+"_big.jpg";
+					}
+				}
+				bigbox.onmouseover = function(){
+					//top,滚动条距离顶部距离
+					var top = document.documentElement.scrollTop||document.body.scrollTop;
+					fdj.style.display = "block";
+					big.style.display = "block";
+					//切换背景图片
+					big.style.backgroundImage ="url("+bigimg.src+")";
+					bigbox.onmousemove = function(evt){
+						var e = evt ||event;
+						var x = e.clientX;
+						var y = e.clientY;
+						//放大镜在大盒子的水平位置
+						var a = x-bigbox.offsetLeft-fdj.offsetWidth/2;
+						//放大镜在大盒子的垂直位置
+						var b = y-bigbox.offsetTop-fdj.offsetHeight/2+top;
+						//超出左边
+						if(a<0){
+							a = 0;
+						}
+						//超出上边
+						if(b<0){
+							b =0;
+						}
+						//超出右边
+						if(a>bigbox.offsetWidth-fdj.offsetWidth){
+							a =bigbox.offsetWidth-fdj.offsetWidth;
+						}
+						//超出下边
+						if(b>bigbox.offsetHeight-fdj.offsetHeight){
+							b =bigbox.offsetHeight-fdj.offsetHeight;
+						}
+						//位置比例
+						big.style.backgroundPositionX = -(a*2)+"px";
+						big.style.backgroundPositionY = -(b*2)+"px";
+						fdj.style.left = a+"px";
+						fdj.style.top = b+"px";
+					    
+					}
+				}
+				//移出大盒子
+				bigbox.onmouseout = function(){
+					//放大镜隐藏
+					fdj.style.display = "none";
+					//旁边盒子隐藏
+					big.style.display = "none";
+				}
+			}
+		</script>
+	</head>
+	<body>
+		<div id="bigbox">
+			<img id="bigimg" src="img/shirt_1_big.jpg" />
+			<div id="fdj"></div>
+		</div>
+		<div id="big"></div>
+		<ul id="list">
+			<li><img src="img/shirt_1.jpg"/></li>
+			<li><img src="img/shirt_2.jpg"/></li>
+			<li><img src="img/shirt_3.jpg"/></li>
+			<li><img src="img/shirt_4.jpg"/></li>
+		</ul>
+	</body>
+</html>
